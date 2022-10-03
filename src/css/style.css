@@ -28,3 +28,8 @@ body {
     background-size: contain;
     background-color: brown;
   }
+
+  .hole_has-obj:hover {
+    cursor:url('/src/img/Hammer.cur'), auto;
+    /* cursor:url(http://www.picgifs.com/smileys/smileys-and-emoticons/money/smileys-money-671353.gif), auto; */
+  }

@@ -1,7 +1,9 @@
 // TODO: write code here
 
-const mainEl = document.createElement('main');
+// const { is } = require("core-js/core/object");
 
+const mainEl = document.getElementById('main');
+const root = document.getElementById('root');
 mainEl.innerHTML = `
 <div class="card">
   <div class="hole-game">
@@ -25,7 +27,17 @@ mainEl.innerHTML = `
 </div>
 `;
 
-// const holes = array.from(document.querySelectorAll('hole'));
+
+let counterDaemon = 0;
+let counterClick = 0;
+const counterElement = document.createElement('div');
+root.insertBefore(counterElement, mainEl);
+const paragraph = document.createElement('span');
+// console.log(counterElement)
+// // counterElement.appendChild('span');/
+// const tmpCnt = document.getElementById('cnt');
+
+// // const holes = array.from(document.querySelectorAll('hole'));
 
 (() => {
   let activeHole = 1;
@@ -39,17 +51,56 @@ mainEl.innerHTML = `
   }
   function activateHole(index) {
     getHole(index).classList.add('hole_has-obj', 'pass');
+   
+    counterDaemon += 1;
+    // console.log({counterElement});
+    
+    paragraph.textContent = counterDaemon;
+    root.insertBefore(paragraph, mainEl);
+    // console.log({counterDaemon});
+
+
+
+    const element  = document.getElementsByClassName('hole_has-obj');
+    let isClicked = false;
+    element[0].addEventListener("click", () => {
+      
+      if (!isClicked) {
+        isClicked = true;
+        counterClick += 1;
+        // console.log({counterClick});
+      }
+
+    });
   }
   function next() {
+    let isStartGame = true;
+
+    const buttonStart = document.getElementById('start_game');
+    console.log(buttonStart)
+    buttonStart.addEventListener('click', () => {
+      location.reload()
+    })
+
     setTimeout(() => {
+  
       deactivateHole(activeHole);
       newActiveHole = Math.floor(1 + Math.random() * 16);
       if (newActiveHole !== activeHole) {
         activeHole = newActiveHole;
       }
-      activateHole(activeHole);
-      next();
-    }, 800);
+      if(isStartGame) {
+        activateHole(activeHole);
+        next();
+      }
+
+    }, 1000);
+    if ((counterDaemon - counterClick) === 2) {
+      console.log('looooser');
+      counterClick = 0;
+      counterDaemon = 0;
+      isStartGame = false;
+    }
   }
   next();
 })();
